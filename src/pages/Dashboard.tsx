@@ -1,28 +1,23 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard,
-  FilePlus,
-  LineChart,
-  Bell,
   Search,
   Plus,
   Eye,
   Pencil,
   Trash2,
-  LogOut,
   Loader2,
   AlertCircle,
   HelpCircle,
 } from 'lucide-react'
 import { getAllTests, deleteTest } from '../api/tests'
-import { useAuth } from '../context/AuthContext'
 import type { Test } from '../types'
+import Sidebar from '../components/Sidebar'
+import Navbar from '../components/Navbar'
 
 const Dashboard = () => {
-  const { user, logoutUser } = useAuth()
   const navigate = useNavigate()
-  const location = useLocation()
+
 
   // State Management
   const [tests, setTests] = useState<Test[]>([])
@@ -134,129 +129,15 @@ const Dashboard = () => {
     }
   }
 
-  // Capitalize name helper for navbar
-  const getUserName = () => {
-    if (!user?.userId) return 'Alex Wando'
-    if (user.userId === 'vedant-admin') return 'Alex Wando' // Maintain requested avatar name or fallback
-    return user.userId
-      .split('-')
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ')
-  }
-
   return (
     <div className="min-h-screen flex bg-[#F8F9FA] text-[#1E2139] font-sans">
       {/* 1. Left Sidebar */}
-      <aside className="w-[260px] bg-[#1E2139] text-white flex flex-col justify-between shrink-0 select-none shadow-xl">
-        <div className="flex flex-col">
-          {/* Logo Section */}
-          <div className="p-6 border-b border-white/10 flex items-center justify-start gap-1">
-            <span className="text-xl font-black text-white tracking-tight">Prep</span>
-            <span className="text-xl font-black text-[#4361EE] tracking-tight relative">
-              route
-              {/* Curved dotted line */}
-              <svg
-                className="absolute -top-[8px] left-[-60px] w-[110px] h-[18px]"
-                viewBox="0 0 110 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M 5 15 C 30 2, 80 2, 105 15"
-                  stroke="#FFFFFF"
-                  strokeWidth="2"
-                  strokeDasharray="3 3"
-                  fill="none"
-                  opacity="0.8"
-                />
-                <circle cx="105" cy="15" r="2" fill="#4361EE" />
-              </svg>
-            </span>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="mt-8 px-4 space-y-2">
-            <Link
-              to="/"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                location.pathname === '/'
-                  ? 'bg-[#4361EE] text-white shadow-md shadow-[#4361EE]/20'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <LayoutDashboard size={18} />
-              <span>Dashboard</span>
-            </Link>
-
-            <Link
-              to="/create-test"
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                location.pathname.startsWith('/create-test') ||
-                location.pathname.startsWith('/edit-test') ||
-                location.pathname.startsWith('/add-questions') ||
-                location.pathname.startsWith('/preview')
-                  ? 'bg-[#4361EE] text-white shadow-md shadow-[#4361EE]/20'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <FilePlus size={18} />
-              <span>Test Creation</span>
-            </Link>
-
-            <button
-              disabled
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold text-gray-500 cursor-not-allowed text-left"
-            >
-              <LineChart size={18} />
-              <span>Test Tracking</span>
-            </button>
-          </nav>
-        </div>
-
-        {/* Sidebar Footer / Logout */}
-        <div className="p-4 border-t border-white/10">
-          <button
-            onClick={logoutUser}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 cursor-pointer"
-          >
-            <LogOut size={18} />
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
+      <Sidebar />
 
       {/* 2. Main Content Wrapper */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Navbar */}
-        <header className="h-[70px] bg-white border-b border-[#E2E8F0] px-8 flex items-center justify-between shadow-sm shrink-0">
-          <h1 className="text-xl font-bold text-[#1E2139]">Dashboard</h1>
-
-          {/* User controls / notification */}
-          <div className="flex items-center gap-6">
-            <button className="relative p-2 text-gray-400 hover:text-[#4361EE] rounded-full hover:bg-[#F8F9FA] transition duration-200 cursor-pointer">
-              <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-[#4361EE] rounded-full"></span>
-            </button>
-
-            {/* User Info Block */}
-            <div className="flex items-center gap-3 border-l border-[#E2E8F0] pl-6">
-              {/* Profile Image/Avatar */}
-              <div className="w-10 h-10 rounded-full bg-[#E2E8F0] flex items-center justify-center overflow-hidden border-2 border-white shadow-sm ring-2 ring-[#4361EE]/10">
-                <img
-                  src="https://api.dicebear.com/7.x/adventurer/svg?seed=Alex"
-                  alt="Avatar"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* User Identity Details */}
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-[#1E2139] leading-tight">{getUserName()}</span>
-                <span className="text-xs text-gray-500">{user?.role || 'Admin'}</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Navbar title="Dashboard" />
 
         {/* Inner Main Content Pane */}
         <main className="flex-1 p-8 max-w-[1440px] w-full mx-auto">
