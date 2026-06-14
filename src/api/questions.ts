@@ -1,7 +1,7 @@
 import { apiClient } from './auth'
 import type { Question } from '../types'
 
-const USE_MOCK = false
+const USE_MOCK = true
 
 const mockQuestionsData: Question[] = []
 

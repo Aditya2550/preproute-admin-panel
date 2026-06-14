@@ -2,7 +2,7 @@ import { apiClient } from './auth'
 import { mockTests } from '../mock/data'
 import type { Test } from '../types'
 
-const USE_MOCK = false
+const USE_MOCK = true
 
 let mockTestsData = [...mockTests]
 
