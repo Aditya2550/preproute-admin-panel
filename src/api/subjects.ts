@@ -1,7 +1,7 @@
 import { apiClient } from './auth'
 import { mockSubjects, mockTopics, mockSubTopics } from '../mock/data'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const getSubjects = async () => {
   if (USE_MOCK) return { success: true, data: mockSubjects }

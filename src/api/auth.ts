@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const BASE_URL = 'https://admin-moderator-backend-staging.up.railway.app/api'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
